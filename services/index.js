@@ -1,6 +1,6 @@
 const 
     {collabController} = require('./collab'),
-    {googleSignIn} = require('./signin')
+    {googleSignIn} = require('./signIn')
 
 module.exports = {
     collabController,
