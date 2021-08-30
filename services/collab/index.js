@@ -9,6 +9,7 @@ const waitForMagnetUri = client => new Promise(
 
 const sendDownloadDetails = (client, page) => new Promise(
     async resolve => {
+        let retryCouner = 0;
         let job = setInterval(async () => {
             try {
                 let downloadDetails = await page.evaluate(() => {
@@ -20,6 +21,13 @@ const sendDownloadDetails = (client, page) => new Promise(
                     resolve()
                     clearInterval(job)
                     return;
+                }
+                if(downloadDetails?.split('||||')[2]?.includes('Downloading metadata')){
+                    retryCouner=retryCouner+1;
+                    if(retryCouner>=15){
+                        client.emit('err', 'Bad torrent health, try with some other torrent')
+                        throw new Error('Bad torrent Health')
+                    }
                 }
                 downloadDetails && client.emit('downloadDetails', downloadDetails)
             } catch (err) {
