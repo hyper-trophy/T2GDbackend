@@ -133,7 +133,7 @@ const collabController = async (page, browser, client) => {
     })
 
     await page.waitForTimeout(2000)
-    client.emit('message', 'downloading the torrent, swipe up to see details !')
+    client.emit('message', 'downloading the torrent, swipe up to see details')
     await sendDownloadDetails(client, page)
     //done
     return "done"

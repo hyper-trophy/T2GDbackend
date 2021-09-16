@@ -1,8 +1,11 @@
 const 
     {collabController} = require('./collab'),
-    {googleSignIn} = require('./signIn')
+    {googleSignIn} = require('./signIn'),
+    {searchTorrents, getMagnet} = require('./torrent')
 
 module.exports = {
     collabController,
-    googleSignIn
+    googleSignIn,
+    searchTorrents,
+    getMagnet
 }

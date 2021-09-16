@@ -1,18 +1,45 @@
-
+const {searchTorrents, getMagnet} = require('./services')
+var cors = require('cors')
 const puppeteer = require('puppeteer-extra')
 const StealthPlugin = require('puppeteer-extra-plugin-stealth')
 const { googleSignIn, collabController } = require('./services')
 puppeteer.use(StealthPlugin())
-const http = require('http').createServer(function (req, res) {
-  res.writeHead(200, { 'Content-Type': 'text/plain' });
-  res.write('This is none of your Business!');
-  res.end();
-});
+// const http = require('http').createServer(function (req, res) {
+//   res.writeHead(200, { 'Content-Type': 'text/plain' });
+//   res.write('This is none of your Business!');
+//   res.end();
+// });
+const express = require('express');
+const app = express()
+app.use(express.json());
+app.use(cors())
+const http = require('http').Server(app);
+
 const io = require('socket.io')(http, {
   cors: { origin: '*' }
 });
 
+app.get('/', (req, res) => {
+  res.send(`this is none of your business`);
+})
 
+app.get('/search/:searchQuery', async (req, res) => {
+  const { searchQuery } = req.params
+  const result = await searchTorrents(searchQuery)
+  res.status(200).json(result)
+})
+
+app.post('/torrent', async (req, res) => {
+    const { torrent } = req.body
+    try {
+        const magnet = await getMagnet(torrent)
+        res.send(magnet)
+    } catch (e) {
+        console.log(e.message)
+        res.status(500)
+    }
+    return;
+})
 
 const waitTillStart = client => new Promise(
   resolve => client.on('start', resolve)
