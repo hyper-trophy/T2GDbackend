@@ -6,7 +6,7 @@ const searchTorrents = async (searchQuery) => {
   providers.map(ele => 
       TorrentSearchApi.enableProvider(ele))
   const torrents = await TorrentSearchApi.search(providers, searchQuery, null, 30);
-  console.log(searchQuery,torrents);
+  console.log("search query : ",searchQuery);
   return torrents;
 };
 
